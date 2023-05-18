@@ -1,0 +1,26 @@
+{
+  "name": "@urso/cli",
+  "version": "0.1.0",
+  "description": "",
+  "bin": {
+    "urso": "bin/urso.js"
+  },
+  "scripts": {
+    "start": "node bin/urso.js",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.0",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "audiosprite": "^0.7.2",
+    "commander": "^9.4.1",
+    "deepmerge": "^4.3.0",
+    "free-tex-packer-core": "^0.3.4",
+    "recursive-copy": "^2.0.14"
+  }
+}
