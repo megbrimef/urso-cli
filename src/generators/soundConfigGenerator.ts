@@ -1,7 +1,8 @@
 const merge = require('deepmerge')
-import { Config, SoundConfig } from "../shared/interfaces/GeneratorConfigs";
-import { CFG_TYPE } from "../shared/enums/assets";
-import { stringify } from "../shared/helpers";
+import {Config, SoundConfig} from "../shared/interfaces/GeneratorConfigs";
+import {CFG_TYPE} from "../shared/enums/assets";
+import {stringify} from "../shared/helpers";
+import { logInfo } from "../shared/logger";
 
 export function getDefaultSoundConfig(): Config<SoundConfig> {
     return {
@@ -36,7 +37,9 @@ export function getDefaultSoundConfig(): Config<SoundConfig> {
 }
 
 export function getSoundTemplate(name: string): string {
-    const { shared: { srcFolder }, variants, meta } = getDefaultSoundConfig();
+    logInfo(`Creating sound config file with name: '${name}'`);
+    
+    const {shared: {srcFolder}, variants, meta} = getDefaultSoundConfig();
 
     return stringify({
         type: CFG_TYPE.SOUND,

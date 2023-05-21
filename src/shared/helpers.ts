@@ -1,40 +1,26 @@
-import { resolve, extname, basename } from 'path';
-import { CFG_TYPE } from './enums/assets';
-import { FILE_TYPES } from './enums/fileTypes';
-import { Config } from './interfaces/GeneratorConfigs';
-import { getFilesListRecursiveOfTypeAsync, readFileAsync } from './io';
+import {resolve, extname, basename} from 'path';
+import {CFG_TYPE} from './enums/assets';
+import {FILE_TYPES} from './enums/fileTypes';
+import {Config} from './interfaces/GeneratorConfigs';
+import {getFilesListRecursiveOfTypeAsync, readFileAsync} from './io';
+import { logError } from './logger';
 
 export function getAbsolutePath(parts: string[]): string {
     return resolve(process.cwd(), ...parts);
 }
 
-export function getFileExtension(filePath: string): string {
-    return extname(filePath).slice(1);
-}
-
-export function runSafe<T> (clbk: Function): T {
-    try {
-        return clbk();
-    } catch (e) {
-        throw new Error(e.message);
-    }
-}
-
-export async function runSafeAsync<T> (clbk: Function, throwError: boolean = false): Promise<T> {
+export async function runSafeAsync<T>(clbk: Function, doNotLogError = true): Promise<T> {
     try {
         return await clbk();
     } catch (e) {
-        if(throwError)
-            throw new Error(e.message || e.description);
+        if(doNotLogError) {
+            logError(e.message || e.description);
+        }
     }
 }
 
-export function getFileName(assetPath: string): string {
-    return basename(assetPath).split('.').shift();
-}
-
 export async function getAllConfigsOfType(dirPath: string, types: Array<CFG_TYPE>): Promise<string[]> {
-    
+
     const jsonPaths = await getFilesListRecursiveOfTypeAsync(dirPath, [FILE_TYPES.JSON]);
 
     return (await Promise.all(jsonPaths.map(async (jsonPath) => {

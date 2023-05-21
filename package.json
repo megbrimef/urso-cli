@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "audiosprite": "^0.7.2",
+    "chalk": "^4.0.0",
     "commander": "^9.4.1",
     "deepmerge": "^4.3.0",
     "free-tex-packer-core": "^0.3.4",
