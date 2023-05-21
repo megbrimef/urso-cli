@@ -19,15 +19,8 @@ export interface TextureConfig {
     srcFolder?: string,
     destFolder?: string,
     packer?: TexturePackerOptions,
-    optimization?: TextureOptConfig
+    needOptimize?: boolean
 }
-
-export interface TextureOptConfig {
-    speed?: number,
-    min?: number,
-    max?: number,
-}
-
 export interface SoundOptConfig {
     format?: string,
     silence?: number,

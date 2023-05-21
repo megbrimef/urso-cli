@@ -1,4 +1,4 @@
-import {TextureConfig, TextureOptConfig} from "../shared/interfaces/GeneratorConfigs";
+import {TextureConfig} from "../shared/interfaces/GeneratorConfigs";
 import {Config} from "../shared/interfaces/GeneratorConfigs";
 import {
     getFilesListRecursiveOfTypeAsync,
@@ -15,7 +15,7 @@ import {FILE_TYPES} from "../shared/enums/fileTypes";
 import {resolve} from "path";
 import {exec} from "child_process";
 import {CFG_TYPE} from "../shared/enums/assets";
-import { logError, logInfo, logSuccess, logWarning } from "../shared/logger";
+import { logInfo, logSuccess, logWarning } from "../shared/logger";
 
 interface TexturePackData {
     path: string;
@@ -38,7 +38,7 @@ async function getTexturePackData(srcFolder: string, sourceFolder: string): Prom
 
 async function packAtlas(textureConfig: TextureConfig, sourceFolder: string, outputFolder: string) {
     await runSafeAsync(async () => {
-        const {srcFolder, destFolder, packer, optimization} = textureConfig;
+        const {srcFolder, destFolder, packer, needOptimize} = textureConfig;
         const files = await getTexturePackData(srcFolder, sourceFolder);
         const result = await packAsync(files, packer);
 
@@ -51,16 +51,15 @@ async function packAtlas(textureConfig: TextureConfig, sourceFolder: string, out
 
             await writeFileAsync(resolve(toDest, name), buffer);
 
-            if(!name.endsWith('.json') && !name.endsWith('.jpg')) {
-                optimize(resolve(toDest, name), optimization);
+            if(name.endsWith('.png') && needOptimize) {
+                optimize(resolve(toDest, name));
             }
         }));
     });
 }
 
-function optimize(fPath: string, optimization: TextureOptConfig) {
-    const {min, max, speed} = optimization;
-    const cmd = `pngquant --force --ext .png --quality ${min}-${max} --speed ${speed} ${fPath}`;
+function optimize(fPath: string) {
+    const cmd = `pngquant --force --ext .png ${fPath}`;
     exec(cmd, (err) => {
         if (err)
             logWarning(`Optimization FAILED. Need adjust min quality for optimize ${fPath}.`);
