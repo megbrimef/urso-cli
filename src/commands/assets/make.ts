@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import { createCommand, Argument } from 'commander';
-import { writeFileRecursiveAsync } from '../../shared/io';
-import { CFG_TYPE } from '../../shared/enums/assets';
-import { getTextureTemplate } from '../../generators/textureConfigGenerator';
-import { getSoundTemplate } from '../../generators/soundConfigGenerator';
-import { getAbsolutePath } from '../../shared/helpers';
+import {createCommand, Argument} from 'commander';
+import {writeFileRecursiveAsync} from '../../shared/io';
+import {CFG_TYPE} from '../../shared/enums/assets';
+import {getTextureTemplate} from '../../generators/textureConfigGenerator';
+import {getSoundTemplate} from '../../generators/soundConfigGenerator';
+import {getAbsolutePath} from '../../shared/helpers';
+import { logSuccess } from '../../shared/logger';
 
 const typeArg = new Argument('[type]', 'type of argument')
     .argRequired()
@@ -37,5 +38,6 @@ switch (type) {
 }
 
 writeFileRecursiveAsync(getAbsolutePath([path, `${name}.json`]), template);
+logSuccess(`Config file '${name}' was created`);
 
 

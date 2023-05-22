@@ -1,8 +1,8 @@
-import { TexturePackerOptions } from "free-tex-packer-core";
-import { CFG_TYPE } from "../enums/assets";
+import {TexturePackerOptions} from "free-tex-packer-core";
+import {CFG_TYPE} from "../enums/assets";
 
 export interface Config<T> {
-    meta: string, 
+    meta: string,
     type: CFG_TYPE,
     shared?: T,
     variants?: T[]
@@ -19,15 +19,8 @@ export interface TextureConfig {
     srcFolder?: string,
     destFolder?: string,
     packer?: TexturePackerOptions,
-    optimization?: TextureOptConfig
+    needOptimize?: boolean
 }
-
-export interface TextureOptConfig {
-    speed?: number,
-    min?: number,
-    max?: number,
-}
-
 export interface SoundOptConfig {
     format?: string,
     silence?: number,

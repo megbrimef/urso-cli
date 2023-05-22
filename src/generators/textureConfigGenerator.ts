@@ -1,8 +1,17 @@
-import { BitmapFilterType, PackerExporterType, PackerType, ScaleMethod, TextureFormat, TrimMode } from "free-tex-packer-core";
-import { stringify } from "../shared/helpers";
+import {
+    BitmapFilterType,
+    PackerExporterType,
+    PackerType,
+    ScaleMethod,
+    TextureFormat,
+    TrimMode
+} from "free-tex-packer-core";
+import {stringify} from "../shared/helpers";
+
 const merge = require('deepmerge')
-import { CFG_TYPE } from "../shared/enums/assets";
-import { Config, TextureConfig } from "../shared/interfaces/GeneratorConfigs";
+import {CFG_TYPE} from "../shared/enums/assets";
+import {Config, TextureConfig} from "../shared/interfaces/GeneratorConfigs";
+import { logInfo } from "../shared/logger";
 
 export function getDefaultTextureConfig(): Config<TextureConfig> {
     return {
@@ -33,24 +42,20 @@ export function getDefaultTextureConfig(): Config<TextureConfig> {
                 exporter: 'JsonArray' as PackerExporterType.JSON_ARRAY,
                 filter: 'none' as BitmapFilterType.NONE,
             },
-            optimization: {
-                speed: 10,
-                min: 25,
-                max: 100
-            }
+            needOptimize: true
         },
         variants: [
             {
-                destFolder: 'images/atlases/high',
+                destFolder: 'images/high/atlases',
             },
             {
-                destFolder: 'images/atlases/hd',
+                destFolder: 'images/hd/atlases',
                 packer: {
                     scale: 0.75
                 }
             },
             {
-                destFolder: 'images/atlases/medium',
+                destFolder: 'images/medium/atlases',
                 packer: {
                     scale: 0.5
                 }
@@ -60,7 +65,9 @@ export function getDefaultTextureConfig(): Config<TextureConfig> {
 }
 
 export function getTextureTemplate(name: string): string {
-    const { shared: { srcFolder }, variants, meta } = getDefaultTextureConfig();
+    logInfo(`Creating texture config file with name: '${name}'`);
+
+    const {shared: {srcFolder}, variants, meta} = getDefaultTextureConfig();
 
     return stringify({
         type: CFG_TYPE.TEXTURE,

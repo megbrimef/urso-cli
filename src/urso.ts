@@ -3,8 +3,10 @@ import { Command, program } from 'commander';
 import { getConfigCfgPath } from './data/gameConfigData';
 import { runSafeAsync } from './shared/helpers';
 import { isFileExistsAsync } from './shared/io';
+import { greet, logError } from './shared/logger';
 
-runSafeAsync(async() => await runAppAsync())
+greet('URSO CLI TOOL');
+(async () => await runSafeAsync(async() => await runAppAsync()))();
 
 async function runAppAsync() {
     program
@@ -15,7 +17,7 @@ async function runAppAsync() {
         .command('assets', 'working with assets', { executableFile: 'assets.js' })
         .hook('preSubcommand', async (_: Command, actionCommand: Command) => {
             if(!await isFileExistsAsync(getConfigCfgPath()) && actionCommand.name() !== 'init') {
-                program.error('Main config file was not found. Please run `urso init` command.');
+                logError('Main config file was not found. Please run `urso init` command.');
             }
         });
     await program.parseAsync();

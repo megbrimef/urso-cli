@@ -7,10 +7,9 @@ let gameConfigData: GameConfig;
 
 export async function getGameConfigData(): Promise<GameConfig> { 
     if(!gameConfigData) {
-        const fileData = await (await readFileAsync(getConfigCfgPath())).toString();
+        const fileData = (await readFileAsync(getConfigCfgPath())).toString();
         gameConfigData = JSON.parse(fileData) as GameConfig;
     }
-
     return gameConfigData;
 }
 
