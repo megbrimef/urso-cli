@@ -19,8 +19,19 @@ export interface TextureConfig {
     srcFolder?: string,
     destFolder?: string,
     packer?: TexturePackerOptions,
-    needOptimize?: boolean
+    optimize?: OptimizationConfig,
+    webp?: WebpConfig
 }
+
+export interface WebpConfig {
+    enabled: boolean;
+    webpPath: string;
+}
+
+export interface OptimizationConfig {
+    enabled: boolean;
+}
+
 export interface SoundOptConfig {
     format?: string,
     silence?: number,
