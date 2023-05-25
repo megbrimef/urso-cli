@@ -11,7 +11,7 @@ greet('URSO CLI TOOL');
 async function runAppAsync() {
     program
         .name('urso')
-        .version('0.0.1')
+        .version('0.2.1')
         .executableDir('./commands')
         .command('init', 'create general game config', { executableFile: 'init.js' })
         .command('assets', 'working with assets', { executableFile: 'assets.js' })
