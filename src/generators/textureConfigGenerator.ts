@@ -43,7 +43,7 @@ export function getDefaultTextureConfig(): Config<TextureConfig> {
                 filter: 'none' as BitmapFilterType.NONE,
             },
             optimize: {
-                enabled: false,
+                enabled: true,
             },    
             webp: {
                 enabled: false,
