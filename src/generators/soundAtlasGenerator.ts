@@ -1,6 +1,6 @@
 const audiosprite = require('audiosprite');
 import {promisify} from 'util';
-import {getFilesListRecursiveOfTypeAsync, readFileAsync} from "../shared/io";
+import {getFilesListRecursiveOfTypeAsync, readFileAsync, writeFileAsync} from "../shared/io";
 import {getGameConfigData} from "../data/gameConfigData";
 import {CFG_TYPE} from "../shared/enums/assets";
 import {getAbsolutePath, getAllConfigsOfType} from "../shared/helpers";
@@ -24,7 +24,9 @@ export async function packSound(soundConfig: SoundConfig, sourceFolder: string, 
         return;
     }
 
-    await audiospriteAsync(files, options);
+    const data = await audiospriteAsync(files, options);
+    const json = JSON.stringify(data, null, 2);
+    await writeFileAsync(`${getAbsolutePath([outputFolder, destFolder, name])}.json`, json);
 }
 
 export async function packSounds(jsonPath: string) {
