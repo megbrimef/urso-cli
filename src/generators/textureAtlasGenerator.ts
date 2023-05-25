@@ -5,7 +5,8 @@ import {
     isFileExistsAsync,
     readFileAsync,
     writeFileAsync,
-    mkdirAsync
+    mkdirAsync,
+    execAsync
 } from "../shared/io";
 import {getTextureConfigs} from "./textureConfigGenerator"
 import {packAsync} from "free-tex-packer-core";
@@ -13,9 +14,8 @@ import {getAbsolutePath, getAllConfigsOfType, runSafeAsync} from "../shared/help
 import {getGameConfigData} from "../data/gameConfigData";
 import {FILE_TYPES} from "../shared/enums/fileTypes";
 import {resolve} from "path";
-import {exec} from "child_process";
 import {CFG_TYPE} from "../shared/enums/assets";
-import { logInfo, logSuccess, logWarning } from "../shared/logger";
+import { logInfo, logSuccess } from "../shared/logger";
 
 interface TexturePackData {
     path: string;
@@ -38,32 +38,52 @@ async function getTexturePackData(srcFolder: string, sourceFolder: string): Prom
 
 async function packAtlas(textureConfig: TextureConfig, sourceFolder: string, outputFolder: string) {
     await runSafeAsync(async () => {
-        const {srcFolder, destFolder, packer, needOptimize} = textureConfig;
+        const {srcFolder, destFolder, packer, optimize, webp} = textureConfig;
         const files = await getTexturePackData(srcFolder, sourceFolder);
         const result = await packAsync(files, packer);
 
         await Promise.all(result.map(async ({name, buffer}) => {
             const toDest = getAbsolutePath([outputFolder, destFolder]);
-            
+            const absoluteDestPath = resolve(toDest, name);
+
             if (!await isFileExistsAsync(toDest)) {
                 await mkdirAsync(toDest, {recursive: true});
             }
 
-            await writeFileAsync(resolve(toDest, name), buffer);
+            await writeFileAsync(absoluteDestPath, buffer);
 
-            if(name.endsWith('.png') && needOptimize) {
-                optimize(resolve(toDest, name));
+            if(name.endsWith('.png') && optimize?.enabled) {
+                await makeOptimize(absoluteDestPath);
+            }
+
+            if((name.endsWith('.png') || name.endsWith('.jpg')) && webp?.enabled) {
+                const webpDestFolderPath = resolve(toDest, webp?.webpPath || '.');
+
+                if (!await isFileExistsAsync(webpDestFolderPath)) {
+                    await mkdirAsync(webpDestFolderPath, {recursive: true});
+                }
+
+                await makeWebp(toDest, webp?.webpPath || '.', name);
             }
         }));
     });
 }
 
-function optimize(fPath: string) {
+async function makeOptimize(fPath: string) {
     const cmd = `pngquant --force --ext .png ${fPath}`;
-    exec(cmd, (err) => {
-        if (err)
-            logWarning(`Optimization FAILED. Need adjust min quality for optimize ${fPath}.`);
-    })
+    await execAsync(cmd);
+}
+
+async function makeWebp(toDest: string, webpPath: string, fileName: string) {
+    const nameParts = fileName.split('.');
+    nameParts.splice(-1);
+    const nameWithoutExt = nameParts.join('.');
+    const jsonAtlas = (await readFileAsync(resolve(toDest, `${nameWithoutExt}.json`))).toString();
+    const json = JSON.parse(jsonAtlas);
+    json.meta.image = `${nameWithoutExt}.webp`;
+    await writeFileAsync(resolve(toDest, webpPath, `${nameWithoutExt}.json`), JSON.stringify(json, null, 2));
+    const cmd = `cwebp ${resolve(toDest, fileName)} -o ${resolve(toDest, webpPath, `${nameWithoutExt}.webp`)}`;
+    await execAsync(cmd);
 }
 
 export async function packAtlases(textureConfigAbsolutePath: string) {

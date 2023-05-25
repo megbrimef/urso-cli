@@ -42,7 +42,13 @@ export function getDefaultTextureConfig(): Config<TextureConfig> {
                 exporter: 'JsonArray' as PackerExporterType.JSON_ARRAY,
                 filter: 'none' as BitmapFilterType.NONE,
             },
-            needOptimize: true
+            optimize: {
+                enabled: true,
+            },    
+            webp: {
+                enabled: false,
+                webpPath: 'webp'
+            }
         },
         variants: [
             {

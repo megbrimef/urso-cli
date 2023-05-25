@@ -4,6 +4,7 @@ import {promisify} from 'util';
 import {FILE_TYPES} from './enums/fileTypes';
 import {getAbsolutePath, runSafeAsync} from './helpers';
 import { logInfo, logSuccess, logWarning } from './logger';
+import { exec } from 'child_process';
 
 const copy = require('recursive-copy');
 
@@ -13,6 +14,7 @@ const writeFileAsync = promisify(writeFile);
 const statAsync = promisify(stat);
 const readFileAsync = promisify(readFile);
 const copyAsync = promisify(copy);
+const execAsync = promisify(exec);
 
 async function isFileExistsAsync(filePath: string): Promise<boolean> {
     return await runSafeAsync<boolean>(async () => !!await statAsync(filePath), false);
@@ -88,5 +90,6 @@ export {
     mkdirAsync,
     writeFileRecursiveAsync,
     copyAll,
-    copyAsync
+    copyAsync,
+    execAsync
 }
