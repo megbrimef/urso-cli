@@ -26,7 +26,7 @@ async function getTexturePackData(srcFolder: string, sourceFolder: string): Prom
     const files = await getFilesListRecursiveOfTypeAsync(getAbsolutePath([sourceFolder, srcFolder]), [FILE_TYPES.PNG, FILE_TYPES.JPG]);
 
     return await Promise.all(files.map(async (file) => {
-        file = file.replaceAll(/\\/g, '/');
+        file = file.replace(/\\/g, '/');
         const [ , path ] = file.split(srcFolder);
         const contents = await readFileAsync(file);
         return {
