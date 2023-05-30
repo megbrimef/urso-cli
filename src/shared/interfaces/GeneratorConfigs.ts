@@ -26,6 +26,8 @@ export interface TextureConfig {
 export interface WebpConfig {
     enabled: boolean;
     webpPath: string;
+    lossless: boolean;
+    quality: number
 }
 
 export interface OptimizationConfig {

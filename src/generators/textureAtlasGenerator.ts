@@ -1,4 +1,4 @@
-import {TextureConfig} from "../shared/interfaces/GeneratorConfigs";
+import {TextureConfig, WebpConfig} from "../shared/interfaces/GeneratorConfigs";
 import {Config} from "../shared/interfaces/GeneratorConfigs";
 import {
     getFilesListRecursiveOfTypeAsync,
@@ -63,7 +63,7 @@ async function packAtlas(textureConfig: TextureConfig, sourceFolder: string, out
                     await mkdirAsync(webpDestFolderPath, {recursive: true});
                 }
 
-                await makeWebp(toDest, webp?.webpPath || '.', name);
+                await makeWebp(toDest, webp?.webpPath || '.', name, webp);
             }
         }));
     });
@@ -74,15 +74,17 @@ async function makeOptimize(fPath: string) {
     await execAsync(cmd);
 }
 
-async function makeWebp(toDest: string, webpPath: string, fileName: string) {
+async function makeWebp(toDest: string, webpPath: string, fileName: string, webp: WebpConfig) {
     const nameParts = fileName.split('.');
     nameParts.splice(-1);
     const nameWithoutExt = nameParts.join('.');
     const jsonAtlas = (await readFileAsync(resolve(toDest, `${nameWithoutExt}.json`))).toString();
     const json = JSON.parse(jsonAtlas);
     json.meta.image = `${nameWithoutExt}.webp`;
+    const quality = webp.quality;
+
     await writeFileAsync(resolve(toDest, webpPath, `${nameWithoutExt}.json`), JSON.stringify(json, null, 2));
-    const cmd = `cwebp ${resolve(toDest, fileName)} -o ${resolve(toDest, webpPath, `${nameWithoutExt}.webp`)}`;
+    const cmd = `cwebp ${resolve(toDest, fileName)} ${webp.lossless ? '-lossless' : '' } -q ${quality} -o ${resolve(toDest, webpPath, `${nameWithoutExt}.webp`)}`;
     await execAsync(cmd);
 }
 
