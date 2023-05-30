@@ -47,7 +47,9 @@ export function getDefaultTextureConfig(): Config<TextureConfig> {
             },    
             webp: {
                 enabled: false,
-                webpPath: 'webp'
+                webpPath: 'webp',
+                lossless: true,
+                quality: 100
             }
         },
         variants: [
