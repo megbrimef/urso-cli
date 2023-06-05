@@ -1,5 +1,5 @@
-import {TextureConfig, WebpConfig} from "../shared/interfaces/GeneratorConfigs";
-import {Config} from "../shared/interfaces/GeneratorConfigs";
+import { PackerOptions, TextureConfig, WebpConfig } from "../shared/interfaces/GeneratorConfigs";
+import { Config } from "../shared/interfaces/GeneratorConfigs";
 import {
     getFilesListRecursiveOfTypeAsync,
     isFileExistsAsync,
@@ -8,13 +8,13 @@ import {
     mkdirAsync,
     execAsync
 } from "../shared/io";
-import {getTextureConfigs} from "./textureConfigGenerator"
-import {packAsync} from "free-tex-packer-core";
-import {getAbsolutePath, getAllConfigsOfType, runSafeAsync} from "../shared/helpers";
-import {getGameConfigData} from "../data/gameConfigData";
-import {FILE_TYPES} from "../shared/enums/fileTypes";
-import {resolve} from "path";
-import {CFG_TYPE} from "../shared/enums/assets";
+import { getTextureConfigs } from "./textureConfigGenerator"
+import { packAsync } from "free-tex-packer-core";
+import { getAbsolutePath, getAllConfigsOfType, runSafeAsync } from "../shared/helpers";
+import { getGameConfigData } from "../data/gameConfigData";
+import { FILE_TYPES } from "../shared/enums/fileTypes";
+import { resolve, join } from "path";
+import { CFG_TYPE } from "../shared/enums/assets";
 import { logInfo, logSuccess } from "../shared/logger";
 
 interface TexturePackData {
@@ -22,15 +22,18 @@ interface TexturePackData {
     contents: Buffer;
 }
 
-async function getTexturePackData(srcFolder: string, sourceFolder: string): Promise<TexturePackData[]> {
+async function getTexturePackData(srcFolder: string, sourceFolder: string, packer: PackerOptions): Promise<TexturePackData[]> {
     const files = await getFilesListRecursiveOfTypeAsync(getAbsolutePath([sourceFolder, srcFolder]), [FILE_TYPES.PNG, FILE_TYPES.JPG]);
 
     return await Promise.all(files.map(async (file) => {
         file = file.replace(/\\/g, '/');
-        const [ , path ] = file.split(srcFolder);
+        let [, path] = file.split(srcFolder);
         const contents = await readFileAsync(file);
+
+        path = join(packer.additionalPrependFolder, path.slice(1));
+
         return {
-            path: path.slice(1),
+            path,
             contents
         }
     }));
@@ -38,29 +41,29 @@ async function getTexturePackData(srcFolder: string, sourceFolder: string): Prom
 
 async function packAtlas(textureConfig: TextureConfig, sourceFolder: string, outputFolder: string) {
     await runSafeAsync(async () => {
-        const {srcFolder, destFolder, packer, optimize, webp} = textureConfig;
-        const files = await getTexturePackData(srcFolder, sourceFolder);
+        const { srcFolder, destFolder, packer, optimize, webp } = textureConfig;
+        const files = await getTexturePackData(srcFolder, sourceFolder, packer);
         const result = await packAsync(files, packer);
 
-        await Promise.all(result.map(async ({name, buffer}) => {
+        await Promise.all(result.map(async ({ name, buffer }) => {
             const toDest = getAbsolutePath([outputFolder, destFolder]);
             const absoluteDestPath = resolve(toDest, name);
 
             if (!await isFileExistsAsync(toDest)) {
-                await mkdirAsync(toDest, {recursive: true});
+                await mkdirAsync(toDest, { recursive: true });
             }
 
             await writeFileAsync(absoluteDestPath, buffer);
 
-            if(name.endsWith('.png') && optimize?.enabled) {
+            if (name.endsWith('.png') && optimize?.enabled) {
                 await makeOptimize(absoluteDestPath);
             }
 
-            if((name.endsWith('.png') || name.endsWith('.jpg')) && webp?.enabled) {
+            if ((name.endsWith('.png') || name.endsWith('.jpg')) && webp?.enabled) {
                 const webpDestFolderPath = resolve(toDest, webp?.webpPath || '.');
 
                 if (!await isFileExistsAsync(webpDestFolderPath)) {
-                    await mkdirAsync(webpDestFolderPath, {recursive: true});
+                    await mkdirAsync(webpDestFolderPath, { recursive: true });
                 }
 
                 await makeWebp(toDest, webp?.webpPath || '.', name, webp);
@@ -84,12 +87,12 @@ async function makeWebp(toDest: string, webpPath: string, fileName: string, webp
     const quality = webp.quality;
 
     await writeFileAsync(resolve(toDest, webpPath, `${nameWithoutExt}.json`), JSON.stringify(json, null, 2));
-    const cmd = `cwebp ${resolve(toDest, fileName)} ${webp.lossless ? '-lossless' : '' } -q ${quality} -o ${resolve(toDest, webpPath, `${nameWithoutExt}.webp`)}`;
+    const cmd = `cwebp ${resolve(toDest, fileName)} ${webp.lossless ? '-lossless' : ''} -q ${quality} -o ${resolve(toDest, webpPath, `${nameWithoutExt}.webp`)}`;
     await execAsync(cmd);
 }
 
 export async function packAtlases(textureConfigAbsolutePath: string) {
-    const {general: {sourceFolder, outputFolder}} = await getGameConfigData();
+    const { general: { sourceFolder, outputFolder } } = await getGameConfigData();
     const fileData = await readFileAsync(textureConfigAbsolutePath);
     const config = JSON.parse(fileData.toString()) as Config<TextureConfig>;
     logInfo(`Texture pack starting ${config.shared.packer.textureName}`);

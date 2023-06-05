@@ -6,11 +6,11 @@ import {
     TextureFormat,
     TrimMode
 } from "free-tex-packer-core";
-import {stringify} from "../shared/helpers";
+import { stringify } from "../shared/helpers";
 
 const merge = require('deepmerge')
-import {CFG_TYPE} from "../shared/enums/assets";
-import {Config, TextureConfig} from "../shared/interfaces/GeneratorConfigs";
+import { CFG_TYPE } from "../shared/enums/assets";
+import { Config, TextureConfig } from "../shared/interfaces/GeneratorConfigs";
 import { logInfo } from "../shared/logger";
 
 export function getDefaultTextureConfig(): Config<TextureConfig> {
@@ -41,10 +41,11 @@ export function getDefaultTextureConfig(): Config<TextureConfig> {
                 packer: 'OptimalPacker' as PackerType.OPTIMAL_PACKER,
                 exporter: 'JsonArray' as PackerExporterType.JSON_ARRAY,
                 filter: 'none' as BitmapFilterType.NONE,
+                additionalPrependFolder: ''
             },
             optimize: {
                 enabled: true,
-            },    
+            },
             webp: {
                 enabled: false,
                 webpPath: 'webp',
@@ -75,7 +76,7 @@ export function getDefaultTextureConfig(): Config<TextureConfig> {
 export function getTextureTemplate(name: string): string {
     logInfo(`Creating texture config file with name: '${name}'`);
 
-    const {shared: {srcFolder}, variants, meta} = getDefaultTextureConfig();
+    const { shared: { srcFolder }, variants, meta } = getDefaultTextureConfig();
 
     return stringify({
         type: CFG_TYPE.TEXTURE,

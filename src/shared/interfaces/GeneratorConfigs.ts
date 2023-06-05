@@ -1,5 +1,5 @@
-import {TexturePackerOptions} from "free-tex-packer-core";
-import {CFG_TYPE} from "../enums/assets";
+import { TexturePackerOptions } from "free-tex-packer-core";
+import { CFG_TYPE } from "../enums/assets";
 
 export interface Config<T> {
     meta: string,
@@ -18,9 +18,13 @@ export interface SoundConfig {
 export interface TextureConfig {
     srcFolder?: string,
     destFolder?: string,
-    packer?: TexturePackerOptions,
+    packer?: PackerOptions,
     optimize?: OptimizationConfig,
     webp?: WebpConfig
+}
+
+export interface PackerOptions extends TexturePackerOptions {
+    additionalPrependFolder?: string
 }
 
 export interface WebpConfig {
