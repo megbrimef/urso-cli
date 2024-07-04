@@ -1,5 +1,4 @@
-#!/usr/bin/env node
-import { createCommand, Argument } from 'commander';
+import { Argument, Command } from 'commander';
 import { writeFileRecursiveAsync } from '../../shared/io';
 import { CFG_TYPE } from '../../shared/enums/assets';
 import { getTextureTemplate } from '../../generators/textureConfigGenerator';
@@ -16,26 +15,28 @@ const nameArg = new Argument('[name]', 'name of config')
 const pathArg = new Argument('[path]', 'path of config')
     .argRequired();
 
-const cmd = createCommand()
-    .addArgument(typeArg)
-    .addArgument(nameArg)
-    .addArgument(pathArg)
-    .parse();
+function action(type: string, name: string, path: string) {
+    let template: string = '';
 
-const [type, name, path] = cmd.args;
+    switch (type) {
+        case CFG_TYPE.TEXTURE:
+            template = getTextureTemplate(name);
+            break;
+        case CFG_TYPE.SOUND:
+            template = getSoundTemplate(name);
+        default:
+            break;
+    }
 
-let template: string = '';
-
-switch (type) {
-    case CFG_TYPE.TEXTURE:
-        template = getTextureTemplate(name);
-        break;
-    case CFG_TYPE.SOUND:
-        template = getSoundTemplate(name);
-    default:
-        break;
+    writeFileRecursiveAsync(getAbsolutePath([path, `${name}.json`]), template);
 }
 
-writeFileRecursiveAsync(getAbsolutePath([path, `${name}.json`]), template);
-
-
+export function addMakeSubcommand(program: Command) {
+    return program
+        .command('make')
+        .description('create config')
+        .addArgument(typeArg)
+        .addArgument(nameArg)
+        .addArgument(pathArg)
+        .action(action)
+};

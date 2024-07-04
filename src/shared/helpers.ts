@@ -3,6 +3,7 @@ import { CFG_TYPE } from './enums/assets';
 import { FILE_TYPES } from './enums/fileTypes';
 import { Config } from './interfaces/GeneratorConfigs';
 import { getFilesListRecursiveOfTypeAsync, readFileAsync } from './io';
+import { Command } from 'commander';
 
 export function getAbsolutePath(parts: string[]): string {
     return resolve(process.cwd(), ...parts);
@@ -34,7 +35,6 @@ export function getFileName(assetPath: string): string {
 }
 
 export async function getAllConfigsOfType(dirPath: string, types: Array<CFG_TYPE>): Promise<string[]> {
-    
     const jsonPaths = await getFilesListRecursiveOfTypeAsync(dirPath, [FILE_TYPES.JSON]);
 
     return (await Promise.all(jsonPaths.map(async (jsonPath) => {

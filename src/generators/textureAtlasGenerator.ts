@@ -1,14 +1,14 @@
-import { TextureConfig, TextureOptConfig } from "../shared/interfaces/GeneratorConfigs";
-import { Config } from "../shared/interfaces/GeneratorConfigs";
-import { getFilesListRecursiveOfTypeAsync, isFileExistsAsync, readFileAsync, writeFileAsync, mkdirAsync } from "../shared/io";
-import { getTextureConfigs } from "./textureConfigGenerator"
-import { packAsync } from "free-tex-packer-core";
-import { getAbsolutePath, getAllConfigsOfType, runSafeAsync } from "../shared/helpers";
-import { getGameConfigData } from "../data/gameConfigData";
-import { FILE_TYPES } from "../shared/enums/fileTypes";
-import { resolve } from "path";
-import { exec } from "child_process";
-import { CFG_TYPE } from "../shared/enums/assets";
+import { TextureConfig, TextureOptConfig } from '../shared/interfaces/GeneratorConfigs';
+import { Config } from '../shared/interfaces/GeneratorConfigs';
+import { getFilesListRecursiveOfTypeAsync, isFileExistsAsync, readFileAsync, writeFileAsync, mkdirAsync } from '../shared/io';
+import { getTextureConfigs } from './textureConfigGenerator'
+import { packAsync } from 'free-tex-packer-core';
+import { getAbsolutePath, getAllConfigsOfType, runSafeAsync } from '../shared/helpers';
+import { getGameConfigData } from '../data/gameConfigData';
+import { FILE_TYPES } from '../shared/enums/fileTypes';
+import { resolve } from 'path';
+import { exec } from 'child_process';
+import { CFG_TYPE } from '../shared/enums/assets';
 
 interface TexturePackData {
     path: string;

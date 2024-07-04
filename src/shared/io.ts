@@ -1,4 +1,3 @@
-import { exec } from 'child_process';
 import { readdir, writeFile, stat, readFile, mkdir } from 'fs';
 import { resolve, parse } from 'path';
 import { promisify } from 'util';
@@ -12,7 +11,6 @@ const writeFileAsync = promisify(writeFile);
 const statAsync = promisify(stat);
 const readFileAsync = promisify(readFile);
 const copyAsync = promisify(copy);
-
 
 async function isFileExistsAsync(filePath: string): Promise<boolean> {
     return await runSafeAsync<boolean>(async () => !!await statAsync(filePath));

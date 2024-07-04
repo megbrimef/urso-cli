@@ -7,18 +7,23 @@
   },
   "scripts": {
     "start": "node bin/urso.js",
-    "build": "tsc"
+    "build": "rollup --config"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-replace": "^5.0.7",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^18.11.0",
+    "rollup": "^4.18.0",
+    "tslib": "^2.6.3",
     "typescript": "^4.8.4"
   },
   "dependencies": {
     "audiosprite": "^0.7.2",
-    "commander": "^9.4.1",
+    "commander": "^12.1.0",
     "deepmerge": "^4.3.0",
     "free-tex-packer-core": "^0.3.4",
     "recursive-copy": "^2.0.14"

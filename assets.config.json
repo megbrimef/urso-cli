@@ -1,0 +1,11 @@
+{
+    "general": {
+        "sourceFolder": "src/assets",
+        "outputFolder": "src/bin"
+    },
+    "copy": {
+        "images/spines": "images/spines",
+        "fonts": "fonts",
+        "sounds": "sounds"
+    }
+}

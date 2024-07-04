@@ -1,12 +1,12 @@
-import { getFilesListRecursiveOfTypeAsync, readFileAsync } from "../shared/io";
-import { getGameConfigData } from "../data/gameConfigData";
-import { CFG_TYPE } from "../shared/enums/assets";
-import { getAbsolutePath, getAllConfigsOfType } from "../shared/helpers";
-import { Config, SoundConfig } from "../shared/interfaces/GeneratorConfigs";
-import { getSoundConfigs } from "./soundConfigGenerator";
+import { getFilesListRecursiveOfTypeAsync, readFileAsync } from '../shared/io';
+import { getGameConfigData } from '../data/gameConfigData';
+import { CFG_TYPE } from '../shared/enums/assets';
+import { getAbsolutePath, getAllConfigsOfType } from '../shared/helpers';
+import { Config, SoundConfig } from '../shared/interfaces/GeneratorConfigs';
+import { getSoundConfigs } from './soundConfigGenerator';
 const audiosprite =  require('audiosprite');
 import { promisify } from 'util';
-import { FILE_TYPES } from "../shared/enums/fileTypes";
+import { FILE_TYPES } from '../shared/enums/fileTypes';
 const audiospriteAsync = promisify(audiosprite);
 
 export async function packSound(soundConfig: SoundConfig, sourceFolder: string, outputFolder: string) {

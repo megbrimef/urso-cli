@@ -1,22 +1,24 @@
 #!/usr/bin/env node
-import { Command, program } from 'commander';
-import { getConfigCfgPath } from './data/gameConfigData';
-import { runSafeAsync } from './shared/helpers';
-import { isFileExistsAsync } from './shared/io';
 
-runSafeAsync(async() => await runAppAsync())
+import { program } from 'commander';
+import { runSafeAsync } from './shared/helpers';
+
+import { addInitCommand } from './commands/init';
+import { addAssetsCommand } from './commands/assets';
+import { addHooks } from './hooks';
+import { addCommands } from './commands';
+
+runSafeAsync(async () => await runAppAsync());
 
 async function runAppAsync() {
     program
         .name('urso')
-        .version('0.0.1')
-        .executableDir('./commands')
-        .command('init', 'create general game config', { executableFile: 'init.js' })
-        .command('assets', 'working with assets', { executableFile: 'assets.js' })
-        .hook('preSubcommand', async (_: Command, actionCommand: Command) => {
-            if(!await isFileExistsAsync(getConfigCfgPath()) && actionCommand.name() !== 'init') {
-                program.error('Main config file was not found. Please run `urso init` command.');
-            }
-        });
+        .version('__APP_VERSION__');
+
+    addHooks(program);
+    addCommands(program)();
+    // addInitCommand(program);
+    // addAssetsCommand(program);
+        
     await program.parseAsync();
 }

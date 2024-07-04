@@ -1,5 +1,5 @@
-import { TexturePackerOptions } from "free-tex-packer-core";
-import { CFG_TYPE } from "../enums/assets";
+import { TexturePackerOptions } from 'free-tex-packer-core';
+import { CFG_TYPE } from '../enums/assets';
 
 export interface Config<T> {
     meta: string, 

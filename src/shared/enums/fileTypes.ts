@@ -5,6 +5,5 @@ export enum FILE_TYPES {
     OGG = 'ogg',
     WAV = 'wav',
     MP3 = 'mp3',
-    M4A = 'm4a'
-    
+    M4A = 'm4a'   
 }

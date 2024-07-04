@@ -1,9 +1,18 @@
 export interface GameConfig {
     general: GameGeneralConfig,
-    copy?: { [from: string]: string } 
+    uber?: GameUberConfig
+    copy?: GameCopyConfig
 }
 
+export interface GameCopyConfig {
+    [from: string]: string
+}
 export interface GameGeneralConfig {
     sourceFolder?: string,
     outputFolder?: string
+}
+
+export interface GameUberConfig {
+    output: string,
+    folders: string[]
 }

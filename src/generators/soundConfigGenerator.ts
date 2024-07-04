@@ -1,7 +1,7 @@
 const merge = require('deepmerge')
-import { Config, SoundConfig } from "../shared/interfaces/GeneratorConfigs";
-import { CFG_TYPE } from "../shared/enums/assets";
-import { stringify } from "../shared/helpers";
+import { Config, SoundConfig } from '../shared/interfaces/GeneratorConfigs';
+import { CFG_TYPE } from '../shared/enums/assets';
+import { stringify } from '../shared/helpers';
 
 export function getDefaultSoundConfig(): Config<SoundConfig> {
     return {
