@@ -11,7 +11,7 @@ export default {
 		file: 'bin/urso.js',
 		format: 'cjs'
 	},
-	external: ['fs', 'commander', 'util', 'path', 'child_process', 'free-tex-packer-core'],
+	external: ['fs', 'commander', 'util', 'path', 'child_process'],
     plugins: [
         ts(),
 		json(),

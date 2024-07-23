@@ -25,7 +25,6 @@
     "audiosprite": "^0.7.2",
     "commander": "^12.1.0",
     "deepmerge": "^4.3.0",
-    "free-tex-packer-core": "^0.3.4",
     "recursive-copy": "^2.0.14"
   }
 }

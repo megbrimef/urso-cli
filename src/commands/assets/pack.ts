@@ -8,15 +8,16 @@ import { copyAll } from '../../shared/io';
 import { packUber } from '../../generators/uberGenerator';
 
 const typeArg = new Argument('[type]', 'type of argument')
-    .choices([CFG_TYPE.TEXTURE, CFG_TYPE.SOUND, CFG_TYPE.COPY, CFG_TYPE.UBER]);
+    .choices([CFG_TYPE.TPS, CFG_TYPE.SOUND, CFG_TYPE.COPY, CFG_TYPE.UBER])
 
-async function action(type = CFG_TYPE.ALL) {
+async function action(type = CFG_TYPE.ALL, params) {
+    const { webp } = params;
     const { general: { sourceFolder, outputFolder }, copy, uber } = await getGameConfigData();
     const fromFolder = getAbsolutePath([sourceFolder]);
 
     switch (type) {
-        case CFG_TYPE.TEXTURE:
-            await packAllTextures(fromFolder);
+        case CFG_TYPE.TPS:
+            await packAllTextures(fromFolder, webp);
             break;
         case CFG_TYPE.SOUND:
             await packAllSounds(fromFolder);
@@ -25,13 +26,13 @@ async function action(type = CFG_TYPE.ALL) {
             await copyAll(sourceFolder, outputFolder, copy);
             break;
         case CFG_TYPE.UBER:
-            await packUber(sourceFolder, outputFolder, uber);
+            await packUber(outputFolder, uber);
             break;
         default:
-            await packAllTextures(fromFolder);
+            await packAllTextures(fromFolder, webp);
             await packAllSounds(fromFolder);
-            await packUber(sourceFolder, outputFolder, uber);
             await copyAll(sourceFolder, outputFolder, copy);
+            await packUber(outputFolder, uber);
             break;
     }
 }
@@ -41,5 +42,6 @@ export function addPackSubcommand(program: Command) {
         .command('pack')
         .description('create assets from configs')
         .addArgument(typeArg)
-        .action(action)
+        .option('-w, --webp <quality>', 'generate webp atlasses 30-100', '0')
+        .action(action);
 };

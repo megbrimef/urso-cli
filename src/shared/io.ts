@@ -1,4 +1,4 @@
-import { readdir, writeFile, stat, readFile, mkdir } from 'fs';
+import { readdir, writeFile, stat, readFile, mkdir, rm } from 'fs';
 import { resolve, parse } from 'path';
 import { promisify } from 'util';
 import { FILE_TYPES } from './enums/fileTypes';
@@ -11,6 +11,7 @@ const writeFileAsync = promisify(writeFile);
 const statAsync = promisify(stat);
 const readFileAsync = promisify(readFile);
 const copyAsync = promisify(copy);
+const rmAsync = promisify(rm);
 
 async function isFileExistsAsync(filePath: string): Promise<boolean> {
     return await runSafeAsync<boolean>(async () => !!await statAsync(filePath));
@@ -77,5 +78,6 @@ export {
     mkdirAsync,
     writeFileRecursiveAsync,
     copyAll,
-    copyAsync
+    copyAsync,
+    rmAsync
 }

@@ -1,4 +1,5 @@
 export enum FILE_TYPES {
+    TPS = 'tps',
     PNG = 'png',
     JPG = 'jpg',
     JSON = 'json',
