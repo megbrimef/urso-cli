@@ -1,14 +1,26 @@
+import { FILE_TYPES } from "../enums/fileTypes"
+
 export interface GameConfig {
     general: GameGeneralConfig
     uber?: GameUberConfig
     copy?: GameCopyConfig
-    layout?: GameLayoutConfig
+    extraAssets?: GameExtraConfig
 }
 
-export interface GameLayoutConfig {
+export interface GameExtraConfig {
+    output: string,
+    list : GameExtraAsset[]
+}
+
+export interface GameExtraAsset {
+    name: string,
+    lazy: boolean,
+    generate: GameExtraAssetType[]
+}
+export interface GameExtraAssetType {
     source: string,
     output: string,
-    imagesSource: string,
+    extensions: FILE_TYPES[]
 }
 
 export interface GameCopyConfig {

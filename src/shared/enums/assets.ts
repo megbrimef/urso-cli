@@ -4,6 +4,6 @@ export enum CFG_TYPE {
     SOUND = 'sound',
     COPY = 'copy',
     UBER = 'uber',
-    LAYOUT = 'layout',
-    WEBP = 'webp'
+    WEBP = 'webp',
+    EXTRA = 'extra',
 }

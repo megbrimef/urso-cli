@@ -6,19 +6,19 @@ import { CFG_TYPE } from '../../shared/enums/assets';
 import { getAbsolutePath } from '../../shared/helpers';
 import { copyAll } from '../../shared/io';
 import { packUber } from '../../generators/uberGenerator';
-import { packAllLayouts } from '../../generators/layoutGenerator';
+import { packExtra } from '../../generators/extraGenerator';
 
 const typeArg = new Argument('[type]', 'type of argument')
-    .choices([CFG_TYPE.TPS, CFG_TYPE.SOUND, CFG_TYPE.COPY, CFG_TYPE.UBER, CFG_TYPE.LAYOUT])
+    .choices([CFG_TYPE.TPS, CFG_TYPE.SOUND, CFG_TYPE.COPY, CFG_TYPE.UBER, CFG_TYPE.EXTRA]);
 
 async function action(type = CFG_TYPE.ALL, params) {
     const { webp } = params;
-    const { general: { sourceFolder, outputFolder }, copy, uber, layout } = await getGameConfigData();
+    const { general: { sourceFolder, outputFolder }, copy, uber, extraAssets } = await getGameConfigData();
     const fromFolder = getAbsolutePath([sourceFolder]);
 
     switch (type) {
-        case CFG_TYPE.LAYOUT:
-            await packAllLayouts(layout, { sourceFolder, outputFolder });
+        case CFG_TYPE.EXTRA:
+            await packExtra(extraAssets, { sourceFolder, outputFolder });
             break;
         case CFG_TYPE.TPS:
             await packAllTextures(fromFolder, webp);
@@ -36,7 +36,6 @@ async function action(type = CFG_TYPE.ALL, params) {
             await packAllTextures(fromFolder, webp);
             await packAllSounds(fromFolder);
             await copyAll(sourceFolder, outputFolder, copy);
-            await packAllLayouts(layout, { sourceFolder, outputFolder });
             await packUber(outputFolder, uber);
             break;
     }
