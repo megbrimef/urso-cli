@@ -3,6 +3,7 @@ import { addInitCommand } from './init';
 import { addAssetsCommand } from './assets';
 import { addMakeSubcommand } from './assets/make';
 import { addPackSubcommand } from './assets/pack';
+import { addGenerateSubcommand } from './assets/generate';
 
 type CommandsGenerator = (program: Command) => Command;
 type CommandsConfig = { generator: CommandsGenerator, subcommands?: CommandsConfig[] }
@@ -19,6 +20,9 @@ const commands: CommandsConfig [] = [
             },
             {
                 generator: addPackSubcommand
+            },
+            {
+                generator: addGenerateSubcommand
             }
         ]
     }

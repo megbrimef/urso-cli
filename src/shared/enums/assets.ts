@@ -5,4 +5,5 @@ export enum CFG_TYPE {
     COPY = 'copy',
     UBER = 'uber',
     LAYOUT = 'layout',
+    WEBP = 'webp'
 }

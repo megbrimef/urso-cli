@@ -3,6 +3,7 @@ export enum FILE_TYPES {
     PNG = 'png',
     JPG = 'jpg',
     JPEG = 'jpeg',
+    WEBP = 'webp',
     JSON = 'json',
     OGG = 'ogg',
     WAV = 'wav',
