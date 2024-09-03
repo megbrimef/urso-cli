@@ -1,7 +1,14 @@
 export interface GameConfig {
-    general: GameGeneralConfig,
+    general: GameGeneralConfig
     uber?: GameUberConfig
     copy?: GameCopyConfig
+    layout?: GameLayoutConfig
+}
+
+export interface GameLayoutConfig {
+    source: string,
+    output: string,
+    imagesSource: string,
 }
 
 export interface GameCopyConfig {

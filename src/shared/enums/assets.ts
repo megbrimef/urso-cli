@@ -3,5 +3,6 @@ export enum CFG_TYPE {
     TPS = 'tps',
     SOUND = 'sound',
     COPY = 'copy',
-    UBER = 'uber'
+    UBER = 'uber',
+    LAYOUT = 'layout',
 }

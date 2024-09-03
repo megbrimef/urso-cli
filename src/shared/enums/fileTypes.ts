@@ -2,9 +2,11 @@ export enum FILE_TYPES {
     TPS = 'tps',
     PNG = 'png',
     JPG = 'jpg',
+    JPEG = 'jpeg',
     JSON = 'json',
     OGG = 'ogg',
     WAV = 'wav',
     MP3 = 'mp3',
-    M4A = 'm4a'   
+    M4A = 'm4a',
+    HTML = 'html', 
 }
