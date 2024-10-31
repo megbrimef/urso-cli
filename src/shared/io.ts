@@ -64,7 +64,14 @@ async function copyAll(sourceFolder: string, outputFolder: string, copyData: { [
     for (const [from, to] of Object.entries(copyData)) {
         const fromPath = getAbsolutePath([sourceFolder, from]);
         const toPath = getAbsolutePath([outputFolder, to]);
-        await copyAsync(fromPath, toPath, { overwrite: true });
+        
+        try {
+            await copyAsync(fromPath, toPath, { overwrite: true })
+        } catch (e) {
+            console.error(`Error copying ${fromPath} to ${toPath}`);
+            console.error(e);
+        }
+      
     }
 }
 
