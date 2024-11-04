@@ -1,4 +1,4 @@
-import { getFilesListRecursiveOfTypeAsync, readFileAsync } from '../shared/io';
+import { getFilesListRecursiveOfTypeAsync, readFileAsync, writeFileAsync } from '../shared/io';
 import { getGameConfigData } from '../data/gameConfigData';
 import { CFG_TYPE } from '../shared/enums/assets';
 import { getAbsolutePath, getAllConfigsOfType } from '../shared/helpers';
@@ -16,7 +16,10 @@ export async function packSound(soundConfig: SoundConfig, sourceFolder: string, 
         ...optimization,
         output: getAbsolutePath([outputFolder, destFolder, name])
     };
-    await audiospriteAsync(files, options);
+    const json = await audiospriteAsync(files, options);
+    const dest = getAbsolutePath([outputFolder, destFolder, `${name}.json`]);
+    debugger;
+    await writeFileAsync(dest, JSON.stringify(json));
 }
 
 export async function packSounds(jsonPath: string) {

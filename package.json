@@ -1,6 +1,6 @@
 {
   "name": "@urso/cli",
-  "version": "0.4.1d",
+  "version": "0.4.2d",
   "description": "",
   "bin": {
     "urso": "bin/urso.js"
