@@ -25,6 +25,7 @@ export async function runSafeAsync<T> (clbk: Function, throwError: boolean = fal
     try {
         return await clbk();
     } catch (e) {
+        console.error(e);
         if(throwError)
             throw new Error(e.message || e.description);
     }

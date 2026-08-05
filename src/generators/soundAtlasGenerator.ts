@@ -18,8 +18,8 @@ export async function packSound(soundConfig: SoundConfig, sourceFolder: string, 
     };
     const json = await audiospriteAsync(files, options);
     const dest = getAbsolutePath([outputFolder, destFolder, `${name}.json`]);
-    debugger;
     await writeFileAsync(dest, JSON.stringify(json));
+    console.log(`Sound atlas packed: ${files.length} file(s) -> ${dest}`);
 }
 
 export async function packSounds(jsonPath: string) {
@@ -32,5 +32,7 @@ export async function packSounds(jsonPath: string) {
 
 export async function packAllSounds(dirPath: string) {
     const allSoundConfigs = await getAllConfigsOfType(dirPath, [CFG_TYPE.SOUND]);
+    console.log(`Packing sounds... found ${allSoundConfigs.length} sound config(s): ${allSoundConfigs.join(', ')}`);
     await Promise.all(allSoundConfigs.map(async(jsonPath) => await packSounds(jsonPath)));
+    console.log('Sounds packed');
 }

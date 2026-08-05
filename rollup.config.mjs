@@ -1,4 +1,4 @@
-import pack from './package.json' assert { type: "json" };
+import pack from './package.json' with { type: "json" };
 
 import ts from '@rollup/plugin-typescript';
 import json from '@rollup/plugin-json';
