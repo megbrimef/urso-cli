@@ -26,7 +26,7 @@ export async function packSounds(jsonPath: string) {
     const { general: { sourceFolder, outputFolder }} = await getGameConfigData();
     const fileData = await readFileAsync(jsonPath);
     const config = JSON.parse(fileData.toString()) as Config<SoundConfig>;
-    const textureConfigs = await getSoundConfigs(config);
+    const textureConfigs = await getSoundConfigs(config, jsonPath);
     await Promise.all(textureConfigs.map(async (soundConfig: SoundConfig) => await packSound(soundConfig, sourceFolder, outputFolder)));
 }
 
